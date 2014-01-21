@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Entry {{entry_id}}
+{% endblock title %}
+
+
+{% block css %}
+		{% if user.is_authenticated and user.is_active %}
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+		{% endif %}
+
+{% endblock css %}
+
+{% block body %}
+
+{% if not user.is_authenticated %}
+	<p>You must be logged in to view this entry</p>
+
+{% elif wrong_user %}
+	<p>You do not have access to this entry</p>
+
+{% else %}
+	<h1>Edit Entry {{entry.pk}}  <small>as <i>{{user.username}}</i></small></h1>
+
+	<form action="" method="post">
+		{% csrf_token %}
+		<table>
+			{% for field in entry_form.visible_fields %}
+				<tr>
+					<td>{{field.label}}</td>
+					<td>{{field}}</td>
+				</tr>
+				<tr>
+					<td>{{field.errors}}</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td><input type="checkbox" name="delete" value='True'>Delete Entry?</td>
+			</tr>
+			<tr>
+				<td><input type="submit" value='Change Entry'></td>
+			</tr>
+
+		</table>
+		
+	</form>
+{% endif %}
+{% include "include_footer.html" %}
+{% endblock body %}
+
+{% block scripts %}
+
+	{% if user.is_authenticated and user.is_active %}
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http:////code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script>
+		$('#id_date').datepicker({ dateFormat: "yy-mm-dd" });
+		$('#id_hours').spinner();  
+	</script>
+
+
+	{% endif %}
+
+{% endblock scripts %}

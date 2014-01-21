@@ -1,0 +1,18 @@
+
+<br>
+<a href="{% url 'timesheet_index' %}">Timesheet Index</a>
+<br>
+{% if user.is_authenticated and user.is_active %}
+<p>Logged in as {{user.username}}</p>
+<ul>
+<li><a href="{% url 'users_profile' %}">Profile</a></li>
+<li><a href="{% url 'users_pm' %}">PMs</a></li>
+<li><a href="{% url 'users_logout' %}">Logout</a></li>
+</ul>
+{% else %}
+<p>Please login or register</p>
+<ul>
+<li><a href="{% url 'users_login' %}">Login</a></li>
+<li><a href="{% url 'users_register' %}">Register</a></li>
+</ul>
+{% endif %}

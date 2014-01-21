@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}
+	New Entry
+{% endblock title %}
+
+{% block css %}
+		{% if user.is_authenticated and user.is_active %}
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+		{% endif %}
+
+{% endblock css %}
+
+{% block body %}
+
+	{% if not user.is_authenticated %}
+		<p>You must login to add a new entry</p>
+	{% else %}
+		<h1>Add New Entry <small>as <i>{{user.username}}</i></small></h1>
+
+		<form action="" method="post">
+			{% csrf_token %}
+
+			<table>
+				{% for field in form.visible_fields %}
+					<tr>
+						<td>{{field.label}}</td>
+						<td>{{field}}</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>{{field.errors}}</td>
+					</tr>
+				{% endfor %}
+
+
+					{% if error %}
+						<tr>
+							<td>
+								<p>{{error}}</p>
+							</td>
+						</tr>
+					{% endif %}
+					<tr><td><input type="submit" value="Add Entry"></td></tr>
+			</table>
+			{% for hidden in form.hidden_fields %}
+					{{hidden}}
+			{% endfor %}
+
+		</form>
+		<br>
+	{% endif %}
+
+{% include "include_footer.html" %}
+{% endblock body %}
+
+{% block scripts %}
+
+	{% if user.is_authenticated and user.is_active %}
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http:////code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script>
+		$('#id_date').datepicker({ dateFormat: "yy-mm-dd" });
+		$('#id_hours').spinner();  
+	</script>
+
+
+	{% endif %}
+
+{% endblock scripts %}

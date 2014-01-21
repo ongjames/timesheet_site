@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Timesheet Index
+{% endblock title %}
+
+{% block css %}
+		{% if user.is_authenticated and user.is_active %}
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+		<link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+		{% endif %}
+{% endblock css %}
+
+{% block body %}
+	<h1>Welcome to the Timesheet Index!</h1>
+
+	{% if user.is_authenticated and user.is_active %}
+		<h4>Timesheet for <i>{{user.username}}</i></h4>
+		<h4></h4>
+		<table id="entries_table">
+			<thead>
+				<th>Date(y-m-d)</th>
+				<th>Title</th>
+				<th>Hours</th>
+				<th>Comments</th>
+				<th>ID (clickable)</th>
+			</thead>
+
+			<tbody>
+				{% for e in entries %}
+					<tr>
+						<td>{{e.date}}</td>
+						<td>{{e.title}}</td>
+						<td>{{e.hours}}</td>
+						<td>{{e.comments}}</td>
+						<td><a href="{% url 'timesheet_entry' e.pk%}">{{e.pk}}</a></td>
+					</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+		<br>
+		<a href="{% url 'timesheet_index_json' %}">JSON</a>
+		<br>
+		<a href="{% url 'timesheet_test_data' %}">insert dummy data</a>
+		<br>
+		<br>
+		<a href="{% url 'timesheet_new_entry' %}">New Entry</a>
+	{% else %}
+		<p>You must login to access your timesheet</p>
+	{% endif %}
+	<br>
+	<a href="{% url 'timesheet_about' %}">About</a>
+	<br>
+	{% include "include_footer.html" %}
+{% endblock body %}
+
+{% block scripts %}
+
+	{% if user.is_authenticated and user.is_active %}
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http:////code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<script src='http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js'></script>
+
+		<script>
+			$('#entries_table').dataTable({
+				'bProcessing': true,
+
+				'bStateSave':true,
+
+
+			});	
+		</script>
+	{% endif %}
+
+{% endblock scripts %}

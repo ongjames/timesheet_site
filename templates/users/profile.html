@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Profile
+{% endblock title %}
+
+{% block body %}
+
+	{% if not user.is_authenticated %}
+		<p>You must be logged in to view your profile</p>
+	{% else %}
+		<h2>{{user.username}}'s Profile</h2>
+		<p>Note: You will be logged out if any changes are successful</p>
+
+		<form name="ch_email" action="" method="post">
+		{% csrf_token %}
+			<table>
+				<tr>
+					<td>Change Email</td><td><input type="email" name="email" value="{{profile.user.email}}"></td>
+				</tr>
+				{% if email_errors %}
+					<tr>
+						<td></td>
+						<td>
+							<ul>
+								{% for e in email_errors %}
+									<li>{{e}}</li>
+								{% endfor %}
+							</ul>
+
+						</td>
+					</tr>
+				{% endif %}
+			</table>
+			<input type="submit" value="Change Email">
+		</form>
+		<br>
+		<form name='ch_password' action="" method='post'>
+		{% csrf_token %}
+			<table>
+				<tr>
+					<td>Current Password</td>
+					<td><input type="password" name="password_cur"></td>
+				</tr>
+				{% if password_cur_errors %}
+					<tr>
+						<td></td>
+						<td>
+							<ul>
+								{% for e in password_cur_errors %}
+									<li>{{e}}</li>
+								{% endfor %}
+							</ul>
+
+						</td>
+					</tr>
+				{% endif %}
+				<tr>
+					<td>New Password</td>
+					<td><input type="password" name="password_new"></td>
+				</tr>
+				{% if password_new_errors %}
+					<tr>
+						<td></td>
+						<td>
+							<ul>
+								{% for e in password_new_errors %}
+									<li>{{e}}</li>
+								{% endfor %}
+							</ul>
+
+						</td>
+					</tr>
+				{% endif %}
+				<tr>
+					<td>Re-Type New Password</td>
+					<td><input type="password" name="password_re"></td>
+				</tr>
+				{% if password_re_errors %}
+					<tr>
+						<td></td>
+						<td>
+							<ul>
+								{% for e in password_re_errors %}
+									<li>{{e}}</li>
+								{% endfor %}
+							</ul>
+
+						</td>
+					</tr>
+				{% endif %}
+
+
+			</table>
+			<input type="submit" value="Change Password">
+		</form>
+		<br>
+		<form action="" name="ch_comments" method='post'>
+			{% csrf_token %}
+			<td><textarea cols="40" id="id_comments" name="comments" rows="3">{{profile.comments}}</textarea></td>
+			<br>
+			<input type="submit" value="Change Comments">
+		</form>
+
+	{% endif %}
+
+	{% include "include_footer.html" %}
+{% endblock body %}

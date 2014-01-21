@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Private Messaging
+{% endblock title %}
+
+{% block body %}
+	{% if not user.is_authenticated %}
+		<p>Please login to send and receive private messages from other uses</p>
+	{% else %}
+		<h1><small>Private Messages for</small> {{user.username}}</h1>
+		<form action="" method="post">
+		{% csrf_token %}
+			<legend>New Message</legend>
+
+			<table>
+				<tr>
+					<td>To</td>
+					<td>{{pm_form.to_user}}</td>
+				</tr>
+				<tr>
+					<td>Message</td>
+					<td>{{pm_form.message}}</td>
+				</tr>
+			</table>
+			<p>{{sent_message}}</p>
+			<input type="submit" value='Send'>
+		</form>
+		<br>
+		{% for message in all_messages %}
+			<p>From: {{message.from_user.username}} ({{message.from_user.email}})</p>
+			<p>Sent: {{message.message_time}}</p>
+			<br>
+			<p>{{message.message}}</p>
+			<br>
+			<p>---</p>
+		{% endfor %}
+	{% endif %}
+{% include "include_footer.html" %}
+{% endblock body %}

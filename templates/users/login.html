@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Login
+{% endblock title %}
+
+{% block body %}
+	{% if user.is_authenticated %}
+		<p>You are logged in</p>
+	{% else %}
+			<h1>Login</h1>
+		<form id="login_form" method="post" action="">
+			    {% csrf_token %}
+
+				<table>
+					<tr>
+						<td>Username</td>
+						<td><input type="text" name="username" value=""/></td>
+					</tr>
+					<tr>
+						<td>Password</td>
+						<td><input type="password" name="password" value=""/></td>
+					</tr>
+				</table>
+				{% if login_success %}
+					<p>{{login_success}}</p>
+				{% else %}
+					{% for msg in login_failure %}
+						<p>{{msg}}</p>
+					{% endfor %}
+				{% endif %}
+				<input type="submit" value="Login" />
+				<br>
+				<a href="{% url 'users_resetpw' %}">Forgotten Password?</a>
+			</form>
+
+	{% endif %}
+
+
+{% include "include_footer.html" %}
+	
+{% endblock body %}
